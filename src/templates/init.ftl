@@ -6,7 +6,7 @@
 <#assign theme_timestamp = themeDisplay.getTheme().getTimestamp() />
 <#assign theme_settings = themeDisplay.getThemeSettings() />
 
-<#assign root_css_class = "aui " + languageUtil.get(locale, "lang.dir") />
+<#assign root_css_class = languageUtil.get(locale, "lang.dir") />
 <#assign css_class = htmlUtil.escape(theme_display.getColorScheme().getCssClass()) + " yui3-skin-sam" />
 
 <#assign liferay_toggle_controls = sessionClicks.get(request, "liferay_toggle_controls", "visible") />
@@ -209,7 +209,7 @@
 
 	<#assign community_name = site_name />
 
-	<#assign is_guest_group = page_group.getName() == "Guest" />
+	<#assign is_guest_group = page_group.isGuest() />
 
 	<#if is_guest_group>
 		<#assign css_class = css_class + " guest-site" />
@@ -298,11 +298,15 @@
 </#if>
 
 <#if page_group.isLayoutPrototype()>
-	<#assign the_title = page_group.getDescriptiveName() />
+	<#assign the_title = page_group.getDescriptiveName(locale) />
 </#if>
 
 <#if tilesTitle == "">
 	<#assign the_title = htmlUtil.escape(the_title) />
+</#if>
+
+<#if the_title != "" && company_name != site_name && !page_group.isLayoutPrototype()>
+	<#assign the_title = the_title + " - " + site_name />
 </#if>
 
 <#if layouts??>
@@ -329,7 +333,12 @@
 <#assign show_site_name = getterUtil.getBoolean(layout.layoutSet.getSettingsProperty("showSiteName"), show_site_name_default) />
 
 <#assign site_logo = company_logo />
-<#assign logo_description = htmlUtil.escape(site_name) />
+
+<#assign logo_description = "" />
+
+<#if !show_site_name>
+	<#assign logo_description = htmlUtil.escape(site_name) />
+</#if>
 
 <#-- ---------- Navigation ---------- -->
 
@@ -385,6 +394,7 @@
 <#-- ---------- Date ---------- -->
 
 <#assign date = dateUtil />
+
 <#assign current_time = date.newDate() />
 <#assign the_year = current_time?date?string("yyyy") />
 
