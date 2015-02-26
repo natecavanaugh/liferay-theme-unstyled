@@ -1,6 +1,6 @@
 {
   "name": "liferay-theme-unstyled",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "The base theme structure for Liferay themes",
   "main": "index.js",
   "scripts": {
